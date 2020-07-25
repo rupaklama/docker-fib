@@ -1,0 +1,53 @@
+language: generic 
+
+# telling Travis to have super user permissions to execute this build
+sudo: required
+
+# Travis to know that we need docker CLI for install
+services:
+  - docker
+
+# steps/commands to execute before testing/deploy
+before_install:
+    # We are going to build test container/version of client project - react,
+    # run tests inside of it. We will use dockerfile.dev to build test image.
+    # Making use of develepment docker file here coz we get access to all test suites.
+    # -t tagging with docker id & name for the image
+  - docker build -t rupaklama/react-test -f ./client/Dockerfile.dev ./client
+
+# this command to run test
+script:
+    # npm test - to overide default startup command / -- --coverage is to exit test mode
+  - docker run -e CI=true rupaklama/react-test npm test -- --coverage
+
+# After running test scipts & everthing passes successfully, 
+# configurations to build production version of our project &
+# push it off to Docker Hub. 
+after_success:
+    # -t tagging with docker id & custome name for the image
+  - docker build -t rupaklama/multi-client ./client
+  - docker build -t rupaklama/multi-nginx ./nginx
+  - docker build -t rupaklama/multi-server ./server
+  - docker build -t rupaklama/multi-worker ./worker
+  # to push built prod images to Docker Hub using our docker account
+  # Log in to the docker CLI
+  # get password from env variable & input as stdin to login
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push rupaklama/multi-client
+  - docker push rupaklama/multi-nginx
+  - docker push rupaklama/multi-server
+  - docker push rupaklama/multi-worker
+
+# deploy:
+#   provider: elasticbeanstalk
+#   region: us-west-1
+#   app: multi-docker
+#   env: MultiDocker-env
+#   bucket_name: elasticbeanstalk-us-west-1-306476627547
+#   bucket_path: docker-multi
+#   on:
+#     branch: master
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key:
+#     secure: $AWS_SECRET_KEY
