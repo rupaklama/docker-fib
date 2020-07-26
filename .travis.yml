@@ -39,15 +39,16 @@ after_success:
   - docker push rupaklama/multi-server
   - docker push rupaklama/multi-worker
 
-# deploy:
-#   provider: elasticbeanstalk
-#   region: us-west-1
-#   app: multi-docker
-#   env: MultiDocker-env
-#   bucket_name: elasticbeanstalk-us-west-1-306476627547
-#   bucket_path: docker-multi
-#   on:
-#     branch: master
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key:
-#     secure: $AWS_SECRET_KEY
+  # one single config object, not array entries
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: us-west-1
+  app: multi-containers-docker
+  env: MultiContainersDocker-env
+  bucket_name: elasticbeanstalk-us-west-1-772606157045
+  bucket_path: docker-multi
+  on:
+    branch: master # use master branch to deploy, not feature branch
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY

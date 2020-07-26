@@ -56,15 +56,15 @@ class Fib extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <label>Enter your index:</label>
+          <label>Enter your nth fib:</label>
           <input
             value={this.state.index}
             onChange={event => this.setState({ index: event.target.value })}
           />
           <button>Submit</button>
         </form>
-
-        <h3>Indexes I have seen:</h3>
+        <h4>Refresh the page to see your results!</h4>
+        <h3>Nth numbers I have seen:</h3>
         {this.renderSeenIndexes()}
 
         <h3>Calculated Values:</h3>

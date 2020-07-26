@@ -1,5 +1,5 @@
 version: '3'
-services:
+services: # host names for containers
   postgres:
     image: 'postgres:latest'
     environment:
@@ -60,3 +60,5 @@ services:
     volumes:
       - /app/node_modules
       - ./worker:/app
+
+      
