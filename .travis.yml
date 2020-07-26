@@ -41,7 +41,7 @@ after_success:
 
   # one single config object, not array entries
 deploy:
-  # edge: true
+  edge: true
   provider: elasticbeanstalk
   region: us-west-1
   app: multi-containers-docker
