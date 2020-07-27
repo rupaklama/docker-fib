@@ -3,7 +3,12 @@ services: # host names for containers
   postgres:
     image: 'postgres:latest'
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres_password
+    volumes:
+      - ./server/conf/postgres.conf:/etc/postgresql/postgresql.conf
+      command: postgres -c config_file=/etc/postgresql/postgresql.conf
+      restart: always
   redis:
     image: 'redis:latest'
   
