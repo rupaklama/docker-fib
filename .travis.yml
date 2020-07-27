@@ -1,7 +1,8 @@
-language: generic 
 
 # telling Travis to have super user permissions to execute this build
 sudo: required
+
+language: generic 
 
 # Travis to know that we need docker CLI for install
 services:
@@ -41,7 +42,6 @@ after_success:
 
   # one single config object, not array entries
 deploy:
-  edge: true
   provider: elasticbeanstalk
   region: us-west-1
   app: multi-containers-docker
